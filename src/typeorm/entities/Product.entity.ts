@@ -6,8 +6,14 @@ export class Product {
     id: number
 
     @Column()
-    username: string
+    title: string
     
     @Column()
     description: string
+    
+    @Column()
+    price: number
+
+    @Column()
+    img: any
 }

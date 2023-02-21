@@ -1,16 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/typeorm/entities/User.entity';
+import { Users } from 'src/typeorm/entities/User.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.user.dto';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+    constructor(@InjectRepository(Users) private userRepository: Repository<Users>) {}
 
     async createUser (dto: CreateUserDto) {
-        const user = this.userRepository.create(dto);
-        return this.userRepository.save(user);
+        // const user = await this.userRepository.findOne({
+        //     where: {phoneNumber: dto.phoneNumber}
+        // })
+        // if (user) throw new BadRequestException('num in use')
+        // return await this.userRepository.save(dto)
+        //  return this.userRepository.save();
         // const role = await this.roleService.getRoleByValue("USER")
         // await user.$set('roles', [role.id])
     }

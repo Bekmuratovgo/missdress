@@ -26,7 +26,7 @@ export class BasketService {
         if (basketOwner) {
             await this.basketRepository.save({total_price: product.price * amount, amount, user_ : {id: userId}, product_: {id: product.id}});
         }
-        await this.basketRepository.save({total_price: product.price * amount, amount: amount, user_ : {id: userId}, product_: {id: product.id}});
+         await this.basketRepository.save({total_price: product.price * amount, amount: amount, user_ : {id: userId}, product_: {id: product.id}});
 
         return this.basketRepository.find()
     }

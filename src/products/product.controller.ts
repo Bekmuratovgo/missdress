@@ -33,4 +33,9 @@ export class ProductsController {
     async getNewProducts () {
         return this.productService.getAllNewProducts()
     }
+
+    @Get('hits')
+    async getHits () {
+        return this.productService.getHitProducts()
+    }
 }

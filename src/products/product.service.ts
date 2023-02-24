@@ -52,8 +52,14 @@ export class ProductsService {
     
     async getAllNewProducts () {
         const products = await this.productRepository.find();
-        let sortedProducts = products.sort((a: any, b: any) => a.id - b.id);
+        let sortedProducts = products.sort((a: any, b: any) => b.createDate - a.createDate);
         console.log(sortedProducts, 'PRODUCTS');
-        
+        return sortedProducts;
+    }
+
+    async getHitProducts () {
+        const products = await this.productRepository.find();
+        const hits = products.sort((a: any, b: any) => b.rating - a.rating).slice(0, 10)
+        return hits
     }
 }

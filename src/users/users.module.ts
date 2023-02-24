@@ -1,7 +1,10 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "src/typeorm/entities/User.entity";
+import { Role } from "src/roles/roles.model";
+import { RolesModule } from "src/roles/roles.module";
+import { UserRole } from "src/roles/user-roles.model";
 import { UsersController } from "./users.controller";
+import { User } from "./users.model";
 import { UsersService } from "./users.service";
 
 
@@ -9,9 +12,8 @@ import { UsersService } from "./users.service";
   controllers: [UsersController],
   providers: [UsersService],
   imports: [
-    TypeOrmModule.forFeature([User])
-    // SequelizeModule.forFeature([User, Role, UserRoles]),
-    // RolesModule
+    TypeOrmModule.forFeature([User, Role, UserRole]),
+    RolesModule
   ]
 })
 export class UsersModule {}

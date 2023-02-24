@@ -1,28 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/typeorm/entities/User.entity';
+import { RolesService } from 'src/roles/roles.service';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create.user.dto';
+import { User } from './users.model';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+    constructor(
+        @InjectRepository(User) private userRepository: Repository<User>,
+        private roleService: RolesService
+    ) { }
 
-    async createUser (dto: CreateUserDto) {
-        const user = this.userRepository.create(dto);
-        return this.userRepository.save(user);
-        // const role = await this.roleService.getRoleByValue("USER")
-        // await user.$set('roles', [role.id])
-    }
-    
-    async updateUser (dto: CreateUserDto) {
-        // const user = await this.userRepository.create(dto);
-        // const role = await this.roleService.getRoleByValue("USER")
-        // await user.$set('roles', [role.id])
-        // return user;
+    async createUser(dto: any) {
+        let user: any = this.userRepository.create(dto);
+        const role = await this.roleService.getRoleByValue("USER")
+        console.log(role, 'role');
+        console.log(user, 'user');
+        
+        let data = {
+            ...user,
+            // role: role
+        }
+        
+        return this.userRepository.save(data);
     }
 
-    async getAllUsers () {
+    async updateUser(id: number, updateUserDto: any) {
+        let entity: any = await this.userRepository.findOneBy({ id })
+        if (!entity) {
+            throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+        }
+
+        await this.userRepository.update(
+        {
+            id
+        },
+        {
+            ...updateUserDto,
+            role: entity.role
+        })
+
+        return this.userRepository.findOne({
+            where: { id }
+        });
+    }
+
+    async getAllUsers() {
         const users = await this.userRepository.find();
         return users;
     }
